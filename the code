@@ -1,0 +1,45 @@
+
+# Using the gganimate package to plot daily new SARS-CoV-2 clinical cases against regional wastewater viral load for
+# 9 wastewater treatment facilities in southeastern VA
+
+
+library(ggplot2)
+library(gganimate)
+library(ggthemes)
+
+
+
+
+fig5_gif <- ggplot()+
+  annotate('rect', xmin = as.Date('2020-03-30'), xmax = as.Date('2020-05-15'), ymin = -Inf, ymax = 0, fill='#084594', alpha=0.3)+
+  annotate('rect', xmin = as.Date('2020-05-15'), xmax = as.Date('2020-06-05'), ymin = -Inf, ymax = 0, fill='#2171B5', alpha=0.3)+
+  annotate('rect', xmin = as.Date('2020-06-05'), xmax = as.Date('2020-07-01'), ymin = -Inf, ymax = 0, fill='#4292C6', alpha=0.3)+
+  annotate('rect', xmin = as.Date('2020-07-01'), xmax = as.Date('2020-07-31'), ymin = -Inf, ymax = 0, fill="#6BAED6", alpha=0.3)+
+  annotate('rect', xmin = as.Date('2020-07-31'), xmax = as.Date('2020-09-09'), ymin = -Inf, ymax = 0, fill="grey55", alpha=0.3)+
+  annotate('rect', xmin = as.Date('2020-09-09'), xmax = as.Date('2020-11-16'), ymin = -Inf, ymax = 0, fill="#6BAED6", alpha=0.3)+
+  annotate('rect', xmin = as.Date('2020-11-16'), xmax = as.Date('2021-01-06'), ymin = -Inf, ymax = 0, fill="#4292C6", alpha=0.3)+
+
+  annotate('text', x = as.Date('2020-04-20'), y = -150, label = "Stay at Home Order", fontface='bold.italic', size = 2.5)+
+  annotate('text', x = as.Date('2020-05-25'), y = -150, label = "Phase 1\nReopening", fontface = 'bold.italic', size = 2.5)+
+  annotate('text', x = as.Date('2020-06-18'), y = -150, label = "Phase 2\n Reopening", fontface = 'bold.italic', size = 2.5)+
+  annotate('text', x = as.Date('2020-07-17'), y = -150, label = "Phase 3\n Reopening", fontface = 'bold.italic', size = 2.5)+
+  annotate('text', x = as.Date('2020-08-20'), y = -150, label = "Hampton Roads\nRestrictions", fontface = 'bold.italic', size = 2.5)+
+  annotate('text', x = as.Date('2020-10-12'), y = -150, label = "Phase 3\nReopening", fontface = 'bold.italic', size = 2.5)+
+  annotate('text', x = as.Date('2020-12-10'), y = -150, label = "Increased\nRestrictions", fontface = 'bold.italic', size = 2.5)+
+  
+  geom_bar(data = HR2, aes(x=Report.Date, y=Sums, group=seq_along(Report.Date)), stat = 'identity', alpha=0.45)+
+  geom_line(data=df8, aes(x=Report.Date, y=Load/ 1.25e+10), color='black',  size = 0.5, alpha=0.45, linetype='dashed')+
+  geom_point(data=df8, aes(x=Report.Date, y=Load/ 1.25e+10, group=seq_along(Report.Date)), size=2.75, alpha=0.95, color='black', fill='#003C67FF')+
+  scale_y_continuous(name = 'New Clinical Cases by Date', 
+                     sec.axis = sec_axis(~.*1.25e+10, name = "Viral Load in Wastewater (copies)"))+
+  labs(x = "")+
+  ggtitle("Daily New Clinical Cases (Bars) and SARS-CoV-2 Viral Load\n in HRSD Treatment Facilities (Dot and Line) ") + 
+  theme_clean()+
+  theme(axis.title = element_text(size = 13), axis.text = element_text(size = 12), plot.caption = element_text(size = 11))+
+  transition_reveal(Report.Date)+
+  view_follow()
+
+
+animate(fig5_gif, height=5, width=10, units='in', res=150, fps=5, end_pause = 8)
+
+anim_save("fig5_gif_follow.gif")
