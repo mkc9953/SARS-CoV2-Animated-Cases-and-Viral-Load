@@ -2,6 +2,13 @@
 # Using the gganimate package to plot daily new SARS-CoV-2 clinical cases against regional wastewater viral load for
 # 9 wastewater treatment facilities in southeastern VA
 
+# this animation uses 2 dataframes;
+# 	HR2 has our regional clinical data as new cases by date and is plotted using bars
+#	  df8 has our weekly wastewater data for the 9 facilities serving the region and is plotted with the dot and line geoms		
+
+# most of the code is really just custom formatting, annotation, and dealing with dual axes
+# the last 2 lines are from gganimate and do all the work for animating it 
+
 
 library(ggplot2)
 library(gganimate)
